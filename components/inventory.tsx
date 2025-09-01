@@ -170,13 +170,13 @@ export default function ProductList({
     return { text: "In Stock", variant: "default" as const };
   };
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">Loading...</div>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="text-center">Loading...</div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="min-h-screen bg-slate-50">

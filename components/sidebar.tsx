@@ -21,6 +21,8 @@ import {
   TrendingUp,
   ShoppingCart,
   Truck,
+  Star,
+  AlertTriangle,
 } from "lucide-react";
 
 export default function SideBar() {
@@ -56,6 +58,7 @@ export default function SideBar() {
         <Button
           variant="ghost"
           className="w-full justify-start text-white hover:bg-white/10"
+             onClick={() => router.push("/dashboard")}
         >
           <TrendingUp className="mr-3 h-4 w-4" />
           Dashboard
@@ -100,13 +103,19 @@ export default function SideBar() {
           <Truck className="mr-3 h-4 w-4" />
           Logistics
         </Button>
-        <Button
-          variant="ghost"
-          className="w-full justify-start text-white hover:bg-white/10"
-        >
-          <Settings className="mr-3 h-4 w-4" />
-          Settings
-        </Button>
+         <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/10"   onClick={() => router.push("/reviews")}>
+            <Star className="mr-3 h-4 w-4" />
+            Reviews
+          </Button>
+
+            <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/10"  onClick={() => router.push("/disputes")}>
+            <AlertTriangle className="mr-3 h-4 w-4" />
+            Disputes
+          </Button>
+           <Button variant="ghost" className="w-full justify-start text-white hover:bg-white/10" onClick={() => router.push("/settings")}>
+            <Settings className="mr-3 h-4 w-4" />
+            Settings
+          </Button>
       </nav>
 
       <div className="absolute bottom-6 left-6 right-6">

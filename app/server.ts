@@ -25,10 +25,10 @@ export const fetchDarazAllCategories = async () => {
 export const fetchDarazCategoryById = async (categoryId: number) => {
   try {
     const response = await axios.get(
-      `${process.env.DARAZ_API_BASE_URL}/get_category_by_id`,
-      {
-        params: { category_id: categoryId },
-      }
+      `${process.env.DARAZ_API_BASE_URL}/get_category_by_id?category_id=${categoryId}`
+      // {
+      //   params: { category_id: categoryId },
+      // }
     );
     return response.data;
   } catch (error) {
@@ -84,6 +84,151 @@ export const fetchDarazProducts = async (accessToken: string) => {
   }
 };
 
+export const fetchDarazAllProductReviews = async (
+  accessToken: string,
+) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_all_product_reviews`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all products reviews:", error);
+  }
+};
+
+export const fetchDarazProductReviews = async (
+  accessToken: string,
+  productId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_product_reviews?item_id=${productId}`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching product reviews:", error);
+  }
+};
+
+export const fetchDarazOrders = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_all_orders`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    console.log("fetchDarazOrders response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+};
+
+export const fetchDarazOrdersInfo = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_orders_with_items`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching orders info:", error);
+    throw new Error("Failed to fetch orders info");
+  }
+};
+
+export const fetchDarazOrderTraceInfo = async (
+  accessToken: string,
+  orderId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/trace_order?order_id=${orderId}`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching order trace info:", error);
+    throw new Error("Failed to fetch order trace info");
+  }
+};
+
+export const fetchDarazOrderLogisticsDetails = async (
+  accessToken: string,
+  orderId: string
+) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_order_logistics_details?order_id=${orderId}`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching order logistics details info:", error);
+    throw new Error("Failed to fetch order logistics details info");
+  }
+};
+
+export const fetchDarazReverseOrdersInfo = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_all_reverse_orders_info`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching reverse orders info:", error);
+    throw new Error("Failed to reverse orders info");
+  }
+};
+
+export const fetchDarazSellerPayoutStatement = async (accessToken: string) => {
+  try {
+    const response = await axios.get(
+      `${process.env.DARAZ_API_BASE_URL}/get_payout`,
+      {
+        headers: {
+          Authorization: accessToken,
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching info:", error);
+    throw new Error("Failed to reverse orders info");
+  }
+};
+
 export const storeProductImage = async (file: File) => {
   try {
     const filePath = `daraz/${Date.now()}-${file.name}`;
@@ -119,12 +264,10 @@ export const migrateDarazProductImage = async (
 ) => {
   try {
     const imageUrl = await storeProductImage(image);
-    console.log(imageUrl)
+    console.log(imageUrl);
     // Call Python API with image URL
     const response = await axios.post(
-      `${
-        process.env.DARAZ_API_BASE_URL
-      }/migrate_image`,
+      `${process.env.DARAZ_API_BASE_URL}/migrate_image`,
       { image_url: imageUrl },
       {
         headers: {
@@ -132,7 +275,7 @@ export const migrateDarazProductImage = async (
         },
       }
     );
-    console.log(response.data)
+    console.log(response.data);
     return response.data.data.image.url;
   } catch (error) {
     console.error("Error migrating Daraz product image:", error);
@@ -140,13 +283,15 @@ export const migrateDarazProductImage = async (
   }
 };
 
-export const listDarazProduct = async (accessToken: string, product: any, images: File[]) => {
+export const listDarazProduct = async (
+  accessToken: string,
+  product: any,
+  images: File[]
+) => {
   try {
     // Migrate images
     product.Images = await Promise.all(
-      images.map((image: File) =>
-        migrateDarazProductImage(accessToken, image)
-      )
+      images.map((image: File) => migrateDarazProductImage(accessToken, image))
     );
     product.Skus[0].Images = product.Images;
     product.Attributes["title"] = product.Attributes["name"];
