@@ -23,7 +23,7 @@ import {
 import { DarazOrder } from "@/interfaces/daraz.interface"
 import SideBar from "./sidebar"
 import darazLogo from "@/public/daraz.png";
-import amazonLogo from "@/public/amazon.png";
+import amazonLogo from "@/public/amazon.png"; 
 import shopifyLogo from "@/public/shopify.png";
 import Image from "next/image"
 import { getPlatformIcon } from "@/lib/utils"
@@ -42,16 +42,6 @@ export default function ListOrders({ orders }: { orders: DarazOrder[]} ) {
   const router = useRouter()
 
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem("isAuthenticated")
-    const email = localStorage.getItem("userEmail")
-
-    if (!isAuthenticated) {
-      router.push("/")
-      return
-    }
-
-    setUserEmail(email || "")
-
     // setOrders(orders)
     setFilteredOrders(orders)
     setIsLoading(false)
@@ -104,12 +94,6 @@ export default function ListOrders({ orders }: { orders: DarazOrder[]} ) {
 
     setFilteredOrders(filtered)
   }, [orders, searchTerm, platformFilter, statusFilter, dateFilter])
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated")
-    localStorage.removeItem("userEmail")
-    router.push("/")
-  }
 
   const getStatusColor = (status: string) => {
     switch (status) {

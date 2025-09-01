@@ -150,6 +150,20 @@ export const fetchDarazOrders = async (accessToken: string) => {
   }
 };
 
+
+export const fetchShopifyOrders = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.API_BASE_URL}/orders/shopify/getAllOrders`,
+    );
+    console.log("fetchShopifyOrders response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+};
+
+
 export const fetchDarazOrdersInfo = async (accessToken: string) => {
   try {
     const response = await axios.get(

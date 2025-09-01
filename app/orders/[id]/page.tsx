@@ -175,7 +175,7 @@ export default function OrderDetails() {
             onClick={() => router.push("/dashboard")}
           >
             <TrendingUp className="mr-3 h-4 w-4" />
-            Dashboard
+            Dashboard 
           </Button>
           <Button
             variant="ghost"
