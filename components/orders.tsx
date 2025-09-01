@@ -26,6 +26,7 @@ import darazLogo from "@/public/daraz.png";
 import amazonLogo from "@/public/amazon.png";
 import shopifyLogo from "@/public/shopify.png";
 import Image from "next/image"
+import { getPlatformIcon } from "@/lib/utils"
 
 
 
@@ -124,19 +125,6 @@ export default function ListOrders({ orders }: { orders: DarazOrder[]} ) {
         return "destructive"
       default:
         return "secondary"
-    }
-  }
-
-  const getPlatformIcon = (platform: string) => {
-    switch (platform) {
-      case "shopify":
-        return shopifyLogo
-      case "daraz":
-        return darazLogo
-      case "amazon":
-        return amazonLogo
-      default:
-        return darazLogo
     }
   }
 

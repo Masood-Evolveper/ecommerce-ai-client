@@ -3,11 +3,14 @@ import {
   fetchDarazCategoryById,
   fetchDarazCategoryChildren,
   fetchDarazProducts,
+  fetchShopifyProducts,
 } from "../server";
 import {
   DarazProduct,
   mapDarazResponseToProduct,
 } from "@/interfaces/daraz.interface";
+import { UnifiedProduct } from "@/interfaces/product.interface";
+import { mapDarazToUnified, mapShopifyToUnified } from "@/lib/utils";
 
 export default async function page() {
   const response = await fetchDarazProducts(
@@ -17,24 +20,20 @@ export default async function page() {
   const darazAllProductsNormalized: DarazProduct[] = await Promise.all(
     darazAllProductsRaw.map((item: any) => mapDarazResponseToProduct(item))
   );
-  // darazAllProductsNormalized.map(async (product) => {
-  //   console.log(product)
-  //   const categoryResponse = await fetchDarazCategoryById(Number(product.category));
-  //   console.log("Category Response:", categoryResponse);
-  //   product.category = categoryResponse.name;
-  // });
-  // const categoryResponse = await fetchDarazCategoryChildren(darazAllProductsNormalized)
-  // for(const product of darazAllProductsNormalized) {
-  //   const category = await fetchDarazCategoryById(Number(product.category));
-  //   console.log("Category Response:", category);
-  //   if(category) product.category = category.name;
-  // }
-
+  const shopifyProducts = await fetchShopifyProducts();
+  console.log("Shopify Products: ", shopifyProducts);
   console.log("daraz: ", darazAllProductsNormalized);
+
+   const unifiedProducts: UnifiedProduct[] = [
+    ...darazAllProductsNormalized.map(mapDarazToUnified),
+    ...shopifyProducts.map(mapShopifyToUnified),
+  ];
+
+  console.log("Unified Products: ", unifiedProducts);
 
   return (
     <>
-      <ProductList darazAllProducts={darazAllProductsNormalized} />
+      <ProductList products={unifiedProducts} />
     </>
   );
 }

@@ -10,7 +10,7 @@ export default async function page() {
   const response = await fetchDarazOrders(
     process.env.ABD_ACCESS_TOKEN as string
   );
-  const darazAllOrders: DarazOrder[] = response.data.orders;
+  const darazAllOrders: DarazOrder[] = response;
   console.log("Orders Response: ", darazAllOrders);
 
   const ordersWithLogisticsDetails: DarazShipmentTracking[] = await Promise.all(
